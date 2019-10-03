@@ -4,22 +4,22 @@ pipeline {
     stages {
         stage('Build Jar') {
             steps {
-                //sh
-                bat "mvn clean package -DskipTests"
+                //sh vs bat (mac or win)
+                sh "mvn clean package -DskipTests"
             }
         }
         stage('Build Image') {
             steps {
                 //sh
-                bat "docker build -t='johnsavath/selenium-docker-bdd' ."
+                sh "docker build -t='johnsavath/selenium-docker-bdd' ."
             }
         }
         stage('Push Image') {
             steps {
 			    withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'destiny1', usernameVariable: 'johnsavath')]) {
                     //sh
-			        bat "docker login --username=${user} --password=${pass}"
-			        bat "docker push johnsavath/selenium-docker-bdd:latest"
+			        sh "docker login --username=${user} --password=${pass}"
+			        sh "docker push johnsavath/selenium-docker-bdd:latest"
 			    }
             }
         }
